@@ -6,6 +6,8 @@ import Loader from "../components/Loader";
 import Filters from "../components/Filters";
 import ywaiLogo from "../assets/ywai.png";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 export default function Dashboard() {
   const [file, setFile] = useState(null);
   const [processedUrl, setProcessedUrl] = useState("");
@@ -30,7 +32,7 @@ export default function Dashboard() {
       setIsLoading(true);
       const token = localStorage.getItem("token");
 
-      const response = await axios.post("http://localhost:3000/api/upload", formData, {
+      const response = await axios.post(`${backendUrl}/api/upload`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
