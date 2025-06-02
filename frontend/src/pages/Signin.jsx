@@ -3,14 +3,17 @@ import { useState } from "react";
 import ywaiLogo from "../assets/ywai.png";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import AuthLoader from "../components/authLoader";
 
 export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSignin(e) {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
         method: "POST",
@@ -29,6 +32,8 @@ export default function Signin() {
       }
     } catch (err) {
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -38,9 +43,7 @@ export default function Signin() {
         <div className="flex justify-center">
           <img src={ywaiLogo} alt="Logo" className="h-12" />
         </div>
-        <h2 className="text-2xl font-bold text-center">
-          Sign In to Your Account
-        </h2>
+        <h2 className="text-2xl font-bold text-center">Sign In to Your Account</h2>
         <form onSubmit={handleSignin} className="space-y-4">
           <input
             type="email"
@@ -60,9 +63,15 @@ export default function Signin() {
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition relative flex items-center justify-center"
           >
             Sign In
+            {loading && (
+              <span className="absolute right-4">
+                <AuthLoader />
+              </span>
+            )}
           </button>
         </form>
         <p className="text-sm text-center">

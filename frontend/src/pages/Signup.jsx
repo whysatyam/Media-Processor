@@ -3,14 +3,17 @@ import { useState } from "react";
 import ywaiLogo from "../assets/ywai.png";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import AuthLoader from "../components/authLoader";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSignup(e) {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
         method: "POST",
@@ -28,6 +31,8 @@ export default function Signup() {
       }
     } catch (err) {
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -57,9 +62,15 @@ export default function Signup() {
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition relative flex items-center justify-center"
           >
             Sign Up
+            {loading && (
+              <span className="absolute right-4">
+                <AuthLoader />
+              </span>
+            )}
           </button>
         </form>
         <p className="text-sm text-center">
