@@ -3,7 +3,7 @@ import { useState } from "react";
 import ywaiLogo from "../assets/ywai.png";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import AuthLoader from "../components/authLoader";
+import AuthLoader from "../components/TinyLoader";
 
 export default function Signin() {
   const [email, setEmail] = useState("");
